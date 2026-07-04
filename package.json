@@ -1,0 +1,26 @@
+{
+  "name": "shadowvault-cli",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "dist/index.js",
+  "author": "shdwmere",
+  "bin": {
+    "shadowvault": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.js"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^8.5.2",
+    "dotenv": "^17.4.2",
+    "neo-blessed": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.13",
+    "tsx": "^4.23.0",
+    "typescript": "^5.8.2"
+  }
+}

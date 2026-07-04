@@ -43,30 +43,32 @@ export async function saveVault(encryptedData: EncryptedVault): Promise<void> {
 /**
  * Lê o arquivo criptografado do disco.
  */
-export function loadVault(): any {
-  // 1. Se o arquivo NÃO existe, não faz sentido tentar descriptografar!
-  if (!fs.existsSync(vaultPath)) {
-    // Aqui você escolhe: ou lança um erro explícito...
-    throw new Error(`VAULT_FILE_NOT_FOUND: O arquivo não existe em ${vaultPath}`);
-    
-    // ...ou se o seu index.ts espera que um cofre novo seja criado, retorne null:
-    // return null;
+export async function loadVault(): Promise<any> {
+  try {
+    // 1. Usando fs.access (que funciona com Promises) para checar se o arquivo existe
+    await fs.access(VAULT_PATH);
+  } catch {
+    // Se o access estourar erro, significa que o arquivo não existe
+    throw new Error(`VAULT_FILE_NOT_FOUND: O arquivo não existe em ${VAULT_PATH}`);
   }
 
   try {
-    const rawData = fs.readFileSync(vaultPath, 'utf8');
+    // 2. Lendo o arquivo de forma assíncrona com o seu import original
+    const rawData = await fs.readFile(VAULT_PATH, 'utf8');
     
-    // 2. Se o arquivo existir mas estiver totalmente vazio (0 bytes)
     if (!rawData.trim()) {
       throw new Error("VAULT_EMPTY: O arquivo existe mas está vazio.");
     }
 
     return JSON.parse(rawData);
   } catch (error: any) {
-    // Evita engolir o erro estrutural do arquivo
+    if (error.message.startsWith('VAULT_FILE_NOT_FOUND')) {
+      throw error;
+    }
     throw new Error(`Erro ao ler o arquivo do cofre: ${error.message}`);
   }
 }
+
 
 /**
  * Função utilitária para fazer o "Seed" / Importação do seu arquivo antigo.

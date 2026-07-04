@@ -1,5 +1,5 @@
 // src/storage/vaultManager.ts
-import fs from 'fs/promises';
+import * as fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { encrypt, decrypt, EncryptedVault } from '../crypto/cypher.js';

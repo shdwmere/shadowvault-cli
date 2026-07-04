@@ -1,4 +1,5 @@
-// src/crypto/cypher.tsimport crypto from 'crypto';
+// src/crypto/cypher.ts
+import * as crypto from 'crypto';
 import { VAULT_CONFIG } from '../config/constants.js';
 
 const ALGORITHM = 'aes-256-gcm';
@@ -42,7 +43,7 @@ export async function encrypt(plainText: string, passwordSecret: string): Promis
 	const iv = crypto.randomBytes(VAULT_CONFIG.ivLength);
 
 	const key = await deriveKey(passwordSecret, salt);
-	const cipher = crypto.createCipheriv(VAULT_CONFIG.algorithm, key, iv);
+	const cipher = crypto.createCipheriv(VAULT_CONFIG.algorithm, key, iv) as crypto.CipherGCM;
 
 	let ciphertext = cipher.update(plainText, 'utf8', 'hex');
 	ciphertext += cipher.final('hex');
@@ -67,7 +68,7 @@ export async function decrypt(encryptedVault: EncryptedVault, passwordSecret: st
 	const authTag = Buffer.from(encryptedVault.authTag, 'hex');
 
 	const key = await deriveKey(passwordSecret, salt);
-	const decipher = crypto.createCipheriv(VAULT_CONFIG.algorithm, key, iv);
+	const decipher = crypto.createDecipheriv(VAULT_CONFIG.algorithm, key, iv) as crypto.DecipherGCM;
 
 	decipher.setAuthTag(authTag)
 

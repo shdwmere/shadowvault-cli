@@ -14,6 +14,7 @@ export async function loadVault(): Promise<any> {
   // 1. Verifica se o arquivo de fato existe no caminho configurado
   try {
     await fs.access(VAULT_PATH);
+    console.log(VAULT_PATH)
   } catch {
     // Se falhar o acesso, o arquivo não existe. Lança o erro com o caminho real para debugar.
     throw new Error(`VAULT_FILE_NOT_FOUND: O arquivo não existe em: ${VAULT_PATH}`);

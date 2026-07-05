@@ -1,48 +1,47 @@
 #!/usr/bin/env node
 // src/index.ts
-import dotenv from 'dotenv';
 import { password } from '@inquirer/prompts';
 import { loadVault } from './storage/vaultManager.js';
 import { decrypt } from './crypto/cypher.js';
-import { mainMenu, printFalloutBanner } from './cli/menu.js';
-
-dotenv.config();
+import { mainMenu, printBanner } from './cli/menu.js';
+import { THEME } from './config/constants.js';
 
 async function startApp() {
-  printFalloutBanner('SECURITY GATEWAY');
+  printBanner('SECURITY GATEWAY');
+
+  let encryptedVault;
 
   try {
-    // 1. Solicita a Master Password escondendo os caracteres digitados
+    encryptedVault = await loadVault();
+  } catch (error: any) {
+    console.log(`${THEME.alert}${THEME.reset} ❌ STORAGE ERROR: ${error.message}`);
+    setTimeout(() => process.exit(1), 3000);
+    return
+  }
+
+  try {
     const masterPassword = await password({
       message: 'ENTER MASTER KEY TO DECRYPT VAULT >',
-      mask: '*' // Coloca asterisco enquanto digita
+      mask: '*'
     });
 
     if (!masterPassword) {
-      console.log('\x1b[31m%s\x1b[0m', '\nOperation aborted.');
-      process.exit(0);
+      console.log(`${THEME.alert}${THEME.reset} \nOperation aborted.`)
     }
 
-    console.log('\x1b[32m%s\x1b[0m', '\n[ ACCESSING LOCAL COFFER... ]');
-    
-    // 2. Carrega o arquivo da Home
-    const encryptedVault = await loadVault();
+    console.log(`${THEME.primary}${THEME.reset} \n[ ACCESSING LOCAL COFFER... ]`);
 
-    // 3. Tenta descriptografar (GCM valida a integridade aqui)
     const decryptedData = await decrypt(encryptedVault, masterPassword);
 
-    // 4. Se chegou aqui, a senha está 100% correta. Joga pro Menu!
     const vaultItems = JSON.parse(decryptedData);
-    
     await mainMenu(vaultItems);
-
-  } catch (error) {
-    console.log('\x1b[31m%s\x1b[0m', '\n❌ FATAL ERROR: ACCESS DENIED. INVALID MASTER KEY.');
-    // Pequeno delay para o usuário ler o erro antes de encerrar
+  } catch (error: any) {
+    console.log(`${THEME.alert}${THEME.reset} \n❌ FATAL ERROR: ACCESS DENIED. INVALID MASTER KEY.`);
     setTimeout(() => {
       process.exit(1);
     }, 2000);
   }
+
 }
 
 startApp().catch(err => {

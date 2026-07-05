@@ -14,7 +14,7 @@ interface VaultItem {
 /**
  * Renderiza um banner estilizado no estilo Fallout (Verde Fósforo)
  */
-export function printFalloutBanner(title: string) {
+export function printBanner(title: string) {
   console.clear();
   console.log(`${THEME.primary}%s${THEME.reset}`, '==================================================');
   console.log(`${THEME.primary}%s${THEME.reset}`, `  SHADOWVAULT OS v1.0.0 - ${title.toUpperCase()}`);
@@ -26,8 +26,8 @@ export function printFalloutBanner(title: string) {
  */
 export async function mainMenu(items: VaultItem[]) {
   while (true) {
-    printFalloutBanner('ROBCO INDUSTRIES CORES');
-    console.log(`${THEME.primary}%s${THEME.reset}`, `[ CORES LOADED: ${items.length} ]\n`);
+    printBanner('ROBCO INDUSTRIES KERNEL');
+    console.log(`${THEME.primary}%s${THEME.reset}`, `[ DATA LOADED: ${items.length} ]\n`);
 
     // Menu de opções principal
     const action = await select({
@@ -40,7 +40,7 @@ export async function mainMenu(items: VaultItem[]) {
     });
 
     if (action === 'logout') {
-      console.log(`${THEME.primary}%s${THEME.reset}`, '\n[ SHUTTING DOWN SHADOWVAULT CORES ]...');
+      console.log(`${THEME.primary}%s${THEME.reset}`, '\n[ SHUTTING DOWN SHADOWVAULT DATA ]...');
       process.exit(0);
     }
 
@@ -58,7 +58,7 @@ export async function mainMenu(items: VaultItem[]) {
  * Sub-tela: Listagem e visualização de uma senha específica
  */
 async function handleListCredentials(items: VaultItem[]) {
-  printFalloutBanner('CREDENTIAL REGISTRY');
+  printBanner('CREDENTIAL REGISTRY');
 
   if (items.length === 0) {
     console.log(`${THEME.alert}%s${THEME.reset}`, 'NO ENTRY FOUND IN THIS COFFER.');
@@ -83,7 +83,7 @@ async function handleListCredentials(items: VaultItem[]) {
 
   const chosenItem = items.find(i => i.id === selectedId);
   if (chosenItem) {
-    printFalloutBanner(`ENTRY: ${chosenItem.name}`);
+    printBanner(`ENTRY: ${chosenItem.name}`);
     console.log(`${THEME.primary}%s${THEME.reset}`, `IDENTIFIER: ${chosenItem.id}`);
     console.log(`${THEME.primary}%s${THEME.reset}`, `EMAIL:      ${chosenItem.email || 'N/A'}`);
     console.log(`${THEME.primary}%s${THEME.reset}`, `USERNAME:   ${chosenItem.username || 'N/A'}`);
@@ -101,7 +101,7 @@ async function handleListCredentials(items: VaultItem[]) {
  * Sub-tela: Busca simples por nome
  */
 async function handleSearch(items: VaultItem[]) {
-  printFalloutBanner('SEARCH ENGINE');
+  printBanner('SEARCH ENGINE');
   
   const query = await input({ message: 'ENTER SEARCH QUERY >' });
   const filtered = items.filter(item => 

@@ -17,7 +17,7 @@ interface VaultItem {
 export function printBanner(title: string) {
   console.clear();
   console.log(`${THEME.primary}%s${THEME.reset}`, '==================================================');
-  console.log(`${THEME.primary}%s${THEME.reset}`, `  SHADOWVAULT OS v1.0.0 - ${title.toUpperCase()}`);
+  console.log(`${THEME.primary}%s${THEME.reset}`, `  SHADOWVAULT v1.0.0 - ${title.toUpperCase()}`);
   console.log(`${THEME.primary}%s${THEME.reset}`, '==================================================\n');
 }
 
@@ -40,7 +40,7 @@ export async function mainMenu(items: VaultItem[]) {
     });
 
     if (action === 'logout') {
-      console.log(`${THEME.primary}%s${THEME.reset}`, '\n[ SHUTTING DOWN SHADOWVAULT DATA ]...');
+      console.log(`${THEME.primary}%s${THEME.reset}`, '\n[ SHUTTING DOWN SHADOWVAULT ]...');
       process.exit(0);
     }
 

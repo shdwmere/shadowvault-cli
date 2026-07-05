@@ -20,20 +20,32 @@ Gerenciador portátil e seguro de senhas por linha de comando (CLI) construído 
 shadowvault-cli/
 ├── src/
 │   ├── config/
-│   │   └── constants.ts      # Configurações do algoritmo, caminhos e tema
+│   │   └── constants.ts
 │   ├── crypto/
-│   │   └── cypher.ts         # Métodos de criptografia e PBKDF2
+│   │   └── cypher.ts
 │   ├── storage/
-│   │   └── vaultManager.ts   # Manipulação e persistência do arquivo JSON
+│   │   └── vaultManager.ts
 │   ├── cli/
-│   │   └── menu.ts           # Fluxo de navegação e telas de prompts
-│   └── index.ts              # Ponto de entrada do sistema
+│   │   └── menu.ts
+│   └── index.ts
 ├── package.json
 └── tsconfig.json
 
 ```
 
 ## 🛠️ Instalação e Execução
+
+### 📱 Notas para Termux (Android)
+
+Antes de rodar, garanta que o Termux tenha acesso ao armazenamento e crie a pasta do cofre no seu local correto:
+
+```bash
+# Liberar permissão de armazenamento (se necessário)
+termux-setup-storage
+
+# O cofre deve residir estritamente em:
+mkdir -p ~/.shadowvault
+touch ~/.shadowvault/vault.json
 
 ### Instalar dependências
 
@@ -59,6 +71,16 @@ Compila o TypeScript para código nativo otimizado:
 npm run build
 npm start
 
+```
+
+### Scripts `package.json`
+
+```json
+"scripts": {
+  "dev": "tsx src/index.ts",
+  "build": "tsc",
+  "start": "node dist/index.js"
+}
 ```
 
 ## ⌨️ Comandos Globais (Opcional)
